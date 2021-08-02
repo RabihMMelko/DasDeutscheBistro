@@ -1,6 +1,9 @@
 import React from "react";
 
-import classes from './AvailableMeals.module.css'
+import Card from "../UI/Card";
+import MealItem from "./MealItem/MealItem";
+
+import classes from "./AvailableMeals.module.css";
 
 const DUMMY_MEALS = [
   {
@@ -14,7 +17,7 @@ const DUMMY_MEALS = [
     id: "m2",
     name: "Deustcher Schweineschnitzel (Schnitzel de porc Allemand)",
     description:
-      "4 côtelettes de porc assaisonnées avec du poivre noir et du sel marin, baignées dans de l'huile à goût neutre et accompangées d'une Spaetzle maison",
+      "4 côtelettes de porc assaisonnées avec du poivre noir et du sel marin, baignées dans de l'huile à goût neutre et accompagnées d'une Spaetzle maison",
     price: 69000,
   },
   {
@@ -34,13 +37,21 @@ const DUMMY_MEALS = [
 ];
 
 const AvailableMeals = () => {
-  const listeMeals = DUMMY_MEALS.map(meal=><li>
-      {meal.name}
-  </li>);
+  const listeMeals = DUMMY_MEALS.map((meal) => (
+    <MealItem
+      id={meal.id}
+      key={meal.id}
+      name={meal.name}
+      description={meal.description}
+      price={meal.price}
+    />
+  ));
 
   return (
     <section className={classes.meals}>
-      <ul>{listeMeals}</ul>
+      <Card>
+        <ul>{listeMeals}</ul>
+      </Card>
     </section>
   );
 };
