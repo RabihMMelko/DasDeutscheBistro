@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import Card from "../UI/Card";
 import MealItem from "./MealItem/MealItem";
-import axios from "axios"
+import axios from "axios";
 import classes from "./AvailableMeals.module.css";
 
 // const DUMMY_MEALS = [
@@ -36,41 +36,66 @@ import classes from "./AvailableMeals.module.css";
 //   },
 // ];
 
-const DUMMY_MEALS = fetch("http://localhost:3001/listMeals").then((res) => {
-  return res.json;
-});
+// const DUMMY_MEALS = fetch("http://localhost:3001/listMeals").then((res) => {
+//   return res.json;
+// });
 
-console.log(DUMMY_MEALS);
 
 const AvailableMeals = () => {
   const [meals, setMeals] = useState([]);
-
-  
+  const [isLoading, setIsLoading] = useState(true);
+  const [httpError, setHttpError] = useState();
 
   useEffect(() => {
-    
-    
     const fetchMeals = async () => {
-      const response = await axios.get('http://localhost:3001/listMeals/getAllMeals');
+      const response = await axios.get(
+        "http://localhost:3001/listMeals/getAllMeals"
+      );
+
+      if (response.ok) {
+        throw new Error(
+          "Une erreur est survenue... Veuillez retourner plus tard"
+        );
+      }
+
       const responseData = await response;
       const loadedMeals = [];
 
-
       for (const key in responseData.data.rows) {
-        let item = responseData.data.rows[key]
+        let item = responseData.data.rows[key];
         loadedMeals.push({
           id: item.meal_id,
           name: item.meal_name,
           description: item.meal_desc,
           price: item.meal_price,
         });
-       }
+      }
+
+      console.log(loadedMeals)
 
       setMeals(loadedMeals);
+      setIsLoading(false);
     };
 
-    fetchMeals();
+    fetchMeals().catch((error) => {
+      setIsLoading(false);
+      setHttpError(error.message);
+    });
   }, []);
+
+  if (isLoading) {
+    return (
+      <section className={classes.loading}>En cours de chargement...</section>
+    );
+  }
+
+  if (httpError) {
+    return (
+      <section className={classes.error}>
+        <p>{httpError}</p>
+      </section>
+    );
+  }
 
   const mealsList = meals.map((meal) => (
     <MealItem
@@ -81,9 +106,9 @@ const AvailableMeals = () => {
       price={meal.price}
     />
   ));
-  
+
   return (
-    <section className={classes.meals} >
+    <section className={classes.meals}>
       <Card>
         <ul>{mealsList}</ul>
       </Card>
