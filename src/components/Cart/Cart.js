@@ -5,6 +5,7 @@ import Modal from "../UI/Modal";
 import CartItem from "./CartItem";
 import CartContext from "../../store/cart-context";
 import Checkout from "./Checkout";
+import axios from "axios";
 
 const Cart = (props) => {
   const [isCheckout, setIsCheckout] = useState(false);
@@ -24,6 +25,20 @@ const Cart = (props) => {
 
   const orderHandler = () => {
     setIsCheckout(true);
+  };
+
+  
+
+  const commandeHandler = (userData) => {
+
+    const orderData = {
+      user: userData,
+      orderedItems: cartCtx.items
+    };
+    axios.post(
+      "http://localhost:3001/ordersMgmt/addOrder",
+      orderData
+    );
   };
 
   const cartItems = (
@@ -60,7 +75,9 @@ const Cart = (props) => {
         <span>Prix Total</span>
         <span>{totalAmount}</span>
       </div>
-      {isCheckout && <Checkout onCancel={props.onClose}/>}
+      {isCheckout && (
+        <Checkout onConfirm={commandeHandler} onCancel={props.onClose} />
+      )}
       {!isCheckout && cartControls}
     </Modal>
   );

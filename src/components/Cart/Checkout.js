@@ -43,8 +43,13 @@ const Checkout = (props) => {
     if (!cmdValide) {
       return;
     }
-
     //Commander
+    props.onConfirm({
+      nom: nom,
+      addr: addr,
+      ville: ville,
+      postalCode: zip,
+    });
   };
 
   const controlInvNom = `${classes.control} ${
