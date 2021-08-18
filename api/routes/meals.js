@@ -8,15 +8,14 @@ const meals = require('../services/meals')
 router.get('/getAllMeals', async function(req, res,next){
     res.header("Access-Control-Allow-Origin", "*"),
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
-  console.log('starting')  
     try{
       res.json(await meals.getMeals());
-      console.log('Done')
   }
   catch(err){
       console.error(err);
+      res.status(500).end()
   }
-
+  res.status(200).end()
 });
 
 router.post('/getMealsByCateg', async function(req, res,next){
@@ -28,8 +27,9 @@ router.post('/getMealsByCateg', async function(req, res,next){
   }
   catch(err){
       console.error(err);
+      res.status(500).end()
   }
-
+  res.status(200).end()
 });
 
 router.get('/getAllCategs', async function(req, res,next){
@@ -41,8 +41,9 @@ router.get('/getAllCategs', async function(req, res,next){
   }
   catch(err){
       console.error(err);
+      res.status(500).end()
   }
-
+  res.status(200).end()
 });
 
 module.exports = router

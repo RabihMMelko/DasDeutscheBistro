@@ -8,6 +8,7 @@ const isTooLong = (value) => value.trim().length !== 4;
 
 const Checkout = (props) => {
   const [formIsValid, setFormIsValid] = useState({
+    id: props.userID,
     nom: true,
     addr: true,
     ville: true,
@@ -32,6 +33,7 @@ const Checkout = (props) => {
     const villeValide = !isEmpty(ville);
 
     setFormIsValid({
+      id: props.userID,
       nom: nomValide,
       addr: addrValide,
       ville: villeValide,
@@ -45,6 +47,7 @@ const Checkout = (props) => {
     }
     //Commander
     props.onConfirm({
+      id: props.userID,
       nom: nom,
       addr: addr,
       ville: ville,

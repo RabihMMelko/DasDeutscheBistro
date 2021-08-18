@@ -17,7 +17,7 @@ const Cart = (props) => {
   const totalAmount = `LBP${cartCtx.totalAmount.toFixed(0)}`;
   const hasItems = cartCtx.items.length > 0;
 
-  console.log(cartCtx.items);
+  
   const cartItemRemoveHandler = (id) => {
     cartCtx.removeItem(id);
   };
@@ -36,6 +36,8 @@ const Cart = (props) => {
       user: userData,
       orderedItems: cartCtx.items,
     };
+
+  
     
    axios.post("http://localhost:3001/ordersMgmt/addOrder", orderData);
     setIsSubmitting(false);
@@ -73,7 +75,7 @@ const Cart = (props) => {
 
   const cartModalContent = (
     <React.Fragment>
-      {cartItems};
+      {cartItems}
       <div className={classes.total}>
         <span>Prix Total</span>
         <span>{totalAmount}</span>
