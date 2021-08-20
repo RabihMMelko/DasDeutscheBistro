@@ -5,7 +5,7 @@ import axios from "axios";
 const LoginContext = React.createContext({
   isLoggedIn: false,
   onLogout: () => {},
-  onLogin: (userName, password) => {},
+  onLogin: async(userName, password) => {}
 });
 
 export const LoginContextProvider = (props) => {
@@ -20,11 +20,12 @@ export const LoginContextProvider = (props) => {
   }, []);
 
   const logoutHandler = () => {
-    localStorage.removeItem("isLoggedIn");
-    setIsLoggedIn(false);
+    // localStorage.removeItem("isLoggedIn");
+    // setIsLoggedIn(false);
+    console.log("Logout")
   };
 
-  const loginHandler = async (userName, password) => {
+  const loginHandler =  async (userName, password) => {
     console.log("I just got triggered");
     const loginDetails = { userName: userName, password: password };
     console.log(loginDetails);
@@ -36,24 +37,24 @@ export const LoginContextProvider = (props) => {
       );
     }
 
-    const responseData = await response;
+    const responseData =  await response;
 
     console.log("RESPONSE", responseData);
 
     if (responseData.data.rows.length > 0) {
-      localStorage.setItem("isLoggedIn", "1");
       setIsLoggedIn(true);
       props.onClose();
     }
   };
 
-  const loginCtx = {
-    isLoggedIn: isLoggedIn,
-    onLogout: logoutHandler,
-    onLogin: loginHandler,
-  };
+  
+
   return (
-    <LoginContext.Provider value={loginCtx}>
+    <LoginContext.Provider value={{
+      isLoggedIn: isLoggedIn,
+      onLogout: logoutHandler,
+      onLogin: loginHandler
+    }}>
       {props.children}
     </LoginContext.Provider>
   );

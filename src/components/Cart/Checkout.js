@@ -73,7 +73,7 @@ const Checkout = (props) => {
     <form className={classes.form} onSubmit={orderHandler}>
       <div className={controlInvNom}>
         <label htmlFor="name">Votre Nom</label>
-        <input type="text" id="name" ref={nameInputRef} />
+        <input type="text" id="name" ref={nameInputRef}/>
         {!formIsValid.nom && <p>Veuillez entrer un nom valide</p>}
       </div>
       <div className={controlInvAddr}>

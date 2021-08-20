@@ -4,7 +4,7 @@ import React, { useState, useEffect, useReducer, useContext } from "react";
 import Modal from "../UI/Modal";
 import classes from "./Login.module.css";
 import Button from "../UI/Button/Button";
-import LoginContext from "./LoginContext";
+import LoginContext, { LoginContextProvider } from "./LoginContext";
 
 //Won't need component data so can do it here
 const loginUserReducer = (state, action) => {
@@ -21,11 +21,11 @@ const loginUserReducer = (state, action) => {
 
 const loginPasswordReducer = (state, action) => {
   if (action.type === "USER_INPUT") {
-    return { value: action.val, isValid: action.val.trim().length > 6 };
+    return { value: action.val, isValid: action.val.trim().length >= 8 };
   }
 
   if (action.type === "INPUT_BLUR") {
-    return { value: state.value, isValid: state.value.trim().length > 6 };
+    return { value: state.value, isValid: state.value.trim().length >= 8 };
   }
 
   return { value: "", isValid: false };
@@ -53,14 +53,7 @@ const Login = (props) => {
 
   const logCtx = useContext(LoginContext);
 
-  useEffect(() => {
-    console.log("EFFECT RUNNING");
-
-    return () => {
-      console.log("EFFECT CLEANUP");
-    };
-  }, []);
-
+  
   //object destruct
   const { isValid: userIsValid } = loginUserState;
   const { isValid: passwordIsValid } = loginPasswordState;
@@ -84,7 +77,7 @@ const Login = (props) => {
   const loginPasswordChangeHandler = (event) => {
     dispatchLoginPassword({ type: "USER_INPUT", val: event.target.value });
     setloginFormIsValid(
-      loginUserState.isValid && event.target.value.trim().length > 6
+      loginUserState.isValid && event.target.value.trim().length >= 8
     );
   };
 
@@ -98,11 +91,13 @@ const Login = (props) => {
 
   const loginSubmitHandler = (event) => {
     event.preventDefault();
-    logCtx.onLogin(loginUserState.value, loginPasswordState.value);
+    
     console.log(loginUserState.value, loginPasswordState.value);
+    props.onLogin(loginUserState.value,loginPasswordState.value)
   };
 
   return (
+    
     <Modal onClose = {props.onHideLogin}>
       <div className={classes["form-wrapper"]}>
         <h4>De retour? Veuillez vous connecter</h4>

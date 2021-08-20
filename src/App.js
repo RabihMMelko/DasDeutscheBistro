@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "./components/Layout/Header";
 import Meals from "./components/Meals/Meals";
 import Cart from "./components/Cart/Cart";
@@ -10,6 +10,20 @@ function App() {
   const [isCartVisible, setIsCartVisible] = useState(false);
   const [isLoginVisible, setIsLoginVisible] = useState(true);
   const [userDetails, setUserDetails] = useState(null);
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isIncorrectLogin, setIsIncorrectLogin] = useState(false)
+
+  useEffect(() => {
+    const storedUserLoggedInInformation = localStorage.getItem("isLoggedIn");
+
+    if (storedUserLoggedInInformation === "1") {
+      setIsLoggedIn(true);
+      setIsIncorrectLogin(false);
+    }
+  }, []);
+
+ 
 
   const showCartHandler = () => {
     setIsCartVisible(true);
@@ -27,21 +41,23 @@ function App() {
     setIsLoginVisible(false);
   };
 
-  const loginHandler = async (login, pass) => {
-    const authData = { uname: login, password: pass };
+  const logoutHandler = () => {
+    localStorage.removeItem("isLoggedIn");
+    setIsLoggedIn(false);
+  };
 
-    const response = axios.post("http://localhost:3001/access/Login", {
-      authData,
-    });
+  const loginHandler = async (log, pass) => {
+    const authData = { userName: log, password: pass };
 
-    if (!response.ok) {
-      throw new Error(
-        "Une erreur est survenue... Veuillez retourner plus tard"
-      );
+    const response = axios.post("http://localhost:3001/login", authData);
+
+    if (response.ok) {
+      setIsIncorrectLogin(false);
+      
     }
 
     const responseData = await response;
-    const userDetail = []
+    const userDetail = [];
 
     if (responseData.data.rows.length > 0) {
       for (const key in responseData.data.rows) {
@@ -54,21 +70,26 @@ function App() {
         });
       }
 
+      localStorage.setItem("isLoggedIn", "1");
       setUserDetails(userDetail);
       setIsLoginVisible(false);
-      setIsCartVisible(true);
     }
   };
 
-  
-
   return (
-    
-    <CartProvider user = {userDetails}>
-      
-      {isCartVisible && <Cart onClose={hideCartHandler} />}
-      {isLoginVisible && <Login onShowLogin = {showLoginHandler} onHideLogin = {hideLoginHandler} onLogin = {loginHandler}/>}
-      <Header onShowCart={showCartHandler} onHideCart={hideCartHandler} />
+    <CartProvider user={userDetails}>
+      {isCartVisible && <Cart onClose={hideCartHandler}/>}
+      {isLoginVisible && (
+        <Login
+          onShowLogin={showLoginHandler}
+          onHideLogin={hideLoginHandler}
+          onLogin={loginHandler}
+          onLogout = {logoutHandler}
+        />
+      )}
+      <Header onShowCart={showCartHandler} onHideCart={hideCartHandler}>
+        <button onClick={logoutHandler}>Se déconnecter</button>
+      </Header>
       <main>
         <Meals />
       </main>

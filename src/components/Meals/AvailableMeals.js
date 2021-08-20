@@ -71,7 +71,6 @@ const AvailableMeals = () => {
         });
       }
 
-      console.log(loadedMeals)
 
       setMeals(loadedMeals);
       setIsLoading(false);
