@@ -4,7 +4,7 @@ import React, { useState, useEffect, useReducer, useContext } from "react";
 import Modal from "../UI/Modal";
 import classes from "./Login.module.css";
 import Button from "../UI/Button/Button";
-import LoginContext, { LoginContextProvider } from "./LoginContext";
+//import LoginContext, { LoginContextProvider } from "./LoginContext";
 
 //Won't need component data so can do it here
 const loginUserReducer = (state, action) => {
@@ -51,7 +51,7 @@ const Login = (props) => {
     }
   );
 
-  const logCtx = useContext(LoginContext);
+  //const logCtx = useContext(LoginContext);
 
   
   //object destruct

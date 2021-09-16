@@ -52,7 +52,7 @@ function App() {
     const response = axios.post("http://localhost:3001/login", authData);
 
     if (response.ok) {
-      setIsIncorrectLogin(false);
+      setIsIncorrectLogin();
       
     }
 
@@ -73,23 +73,22 @@ function App() {
       localStorage.setItem("isLoggedIn", "1");
       setUserDetails(userDetail);
       setIsLoginVisible(false);
+      setIsLoggedIn(true)
     }
   };
 
   return (
     <CartProvider user={userDetails}>
       {isCartVisible && <Cart onClose={hideCartHandler}/>}
-      {isLoginVisible && (
+      {!isLoggedIn && (
         <Login
           onShowLogin={showLoginHandler}
           onHideLogin={hideLoginHandler}
           onLogin={loginHandler}
-          onLogout = {logoutHandler}
+          
         />
       )}
-      <Header onShowCart={showCartHandler} onHideCart={hideCartHandler}>
-        <button onClick={logoutHandler}>Se déconnecter</button>
-      </Header>
+      <Header onShowCart={showCartHandler} onHideCart={hideCartHandler} isLoggedIn = {isLoggedIn} onLogout = {logoutHandler} />
       <main>
         <Meals />
       </main>
