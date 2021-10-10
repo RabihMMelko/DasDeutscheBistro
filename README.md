@@ -22,6 +22,14 @@ Configuration:
 5) cd repertoire
 6) node index.js
 
+# docs
+
+Contient les documents
+
+# SQL
+
+Contient les scripts initiaux
+
 # Le reste
 
 Code front-end avec callback API, à déployer sur serveur front end
